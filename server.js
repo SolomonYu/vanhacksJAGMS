@@ -36,6 +36,20 @@ app.use('/', function(req,res,next){
 
 app.use(express.json());
 
+//upon registering
+app.post('/newuser' function(req,res,next){
+	var newUser = {
+		username: req.body.username,
+		password: req.body.password
+	};
+	users.insertOne(newUser, (err,result) => {
+		if (err) console.log(err);
+	});
+	console.log("new user registered");
+	res.end();
+});
+
+
 //for testing only:
 //view all users
 app.get('/displayall', function(req,res,next){
@@ -46,6 +60,8 @@ app.get('/displayall', function(req,res,next){
     loadThisThing(req,res,next,userArray);
   });
 });
+
+
 
 
 //sends whatever object(toLoad) is passed through this function
