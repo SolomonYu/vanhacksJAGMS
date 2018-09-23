@@ -177,11 +177,11 @@ function sortLeaderboard(req,res,next,userArray){
 		user2: "No user",
 		user3: "No user",
 		user4: "No user",
-		score0: 0,
-		score1: 0,
-		score2: 0,
-		score3: 0,
-		score4: 0
+		score0: "0",
+		score1: "0",
+		score2: "0",
+		score3: "0",
+		score4: "0"
 	}
 	var count = 0;
 	while(userArray.length > 0 && count<5){
