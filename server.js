@@ -44,7 +44,7 @@ app.post('/newuser', function(req,res,next){
 		email: req.body.email,			//string
 		password: req.body.password,	//string
 		fullname: req.body.fullname,	//string
-		mlsaved: 0						//int
+		mlsaved: "0"						//int
 	};
 
 	//check if user exists in databases
@@ -188,7 +188,7 @@ function sortLeaderboard(req,res,next,userArray){
 		var max = 0;
 		var indexToRemove = -1;
 		var userString = "No User";
-		var userScore = 0;
+		var userScore = "0";
 		for (var i = 0; i < userArray.length; i++){
 			if (max <= userArray[i].mlsaved){
 				max = userArray[i].mlsaved;
