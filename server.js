@@ -39,12 +39,14 @@ app.use(express.json());
 //upon registering a new user
 app.post('/newuser', function(req,res,next){
 	var enteredUser = {
-		username: req.body.username,
-		password: req.body.password
+		email: req.body.email,
+		password: req.body.password,
+		fullname: req.body.fullname,
+		mlsaved: 0
 	};
 
 	var existing = users.find(enteredUser).count().then(function(login){
-		console.log("checking if user exists");
+		console.log("checking if user exists for registration");
 		existing = login;
 		existCheck(req,res,next,existing,enteredUser);
 	});
@@ -54,7 +56,7 @@ app.post('/newuser', function(req,res,next){
 function existCheck(req,res,next,existing,enteredUser){
 	if (existing == 0){
 		console.log("user not found, creating new user");
-		users.insertOne(newUser, (err,result) => {
+		users.insertOne(enteredUser, (err,result) => {
 			if (err) console.log(err);
 		});
 		console.log("new user registered");
@@ -74,12 +76,12 @@ function existCheck(req,res,next,existing,enteredUser){
 //when an existing user logs in
 app.post('/login',function(req,res,next){
 	var enteredUser = {
-		username: req.body.username,
+		email: req.body.email,
 		password: req.body.password
 	};
 
 	var existing = users.find(enteredUser).count().then(function(login){
-		console.log("checking if user exists");
+		console.log("checking if user exists for login");
 		existing = login;
 		loginCheck(req,res,next,existing,enteredUser);
 	});
@@ -103,7 +105,16 @@ function loginCheck(req,res,next,existing,enteredUser){
 
 }
 
-//updating a field
+//updating ml saved
+app.post('mlsaved', function(req,res,next){
+	var toSearchfor = { "email": req.body.email };
+	var toSet = { $set: { "mlsaved" : req.body.mlsaved } };
+
+	users.update(toSearchfor,toSet,function(err,res){
+		if(err) throw err;
+		console.log("user pref updated");
+	});
+});
 
 
 
