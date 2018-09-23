@@ -36,7 +36,7 @@ app.use('/', function(req,res,next){
 
 app.use(express.json());
 
-//upon registering
+//upon registering a new user
 app.post('/newuser', function(req,res,next){
 	var enteredUser = {
 		username: req.body.username,
@@ -71,6 +71,39 @@ function existCheck(req,res,next,existing,enteredUser){
 	}
 };
 
+//when an existing user logs in
+app.post('/login',function(req,res,next){
+	var enteredUser = {
+		username: req.body.username,
+		password: req.body.password
+	};
+
+	var existing = users.find(enteredUser).count().then(function(login){
+		console.log("checking if user exists");
+		existing = login;
+		loginCheck(req,res,next,existing,enteredUser);
+	});
+
+});
+
+function loginCheck(req,res,next,existing,enteredUser){
+	if(existing == 1){
+		console.log("valid user has logged in");
+		res.end();
+	}
+	else if(existing == 0){
+		console.log("user does not exist");
+		res.end();
+	}
+	else{
+		console.log("something went wrong with user check");
+		console.log("existing is: " + existing);
+		res.end();
+	}
+
+}
+
+//updating a field
 
 
 
