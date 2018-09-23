@@ -63,6 +63,7 @@ function existCheck(req,res,next,existing,enteredUser){
 			if (err) console.log(err);
 		});
 		console.log("new user registered");
+		//send back a successful status
 		res.send({
 			status: 1
 		})
@@ -70,14 +71,17 @@ function existCheck(req,res,next,existing,enteredUser){
 	}
 	else if(existing == 1){
 		console.log("user already exists");
+		//send back a failiure status
 		res.send({
 			status: 0
 		})
 		res.end();
 	}
 	else{
+		//code SHOULD NOT get to this point
 		console.log("something went wrong with user check");
 		console.log("existing is: " + existing);
+		//send back a failiure status
 		res.send({
 			status: 0
 		})
@@ -106,6 +110,7 @@ function loginCheck(req,res,next,existing,enteredUser){
 	if(existing == 1){
 		console.log("valid user has logged in");
 		var tempuser;
+		//send back the logged in user
 		users.findOne(enteredUser).then(function(loadeduser){
 			tempuser = loadeduser;
 			loadThisThing(req,res,next,tempuser);
@@ -113,12 +118,14 @@ function loginCheck(req,res,next,existing,enteredUser){
 	}
 	else if(existing == 0){
 		console.log("user does not exist");
+		//send back a success status
 		res.send({
 			status: 0
 		})
 		res.end();
 	}
 	else{
+		//code should not get to this point
 		console.log("something went wrong with user check");
 		console.log("existing is: " + existing);
 		res.end();
@@ -133,8 +140,9 @@ app.post('/mlsaved', function(req,res,next){
 
 	users.update(toSearchfor,toSet,function(err,res){
 		if(err) throw err;
-		console.log("user pref updated");
+		console.log("user ml saved");
 	});
+	//send back nothing
 	res.end();
 });
 
@@ -169,20 +177,23 @@ function sortLeaderboard(req,res,next,userArray){
 		user2: "No user",
 		user3: "No user",
 		user4: "No user",
-		user5: "No user",
-		user6: "No user",
-		user7: "No user",
-		user8: "No user",
-		user9: "No user"
+		score0: 0,
+		score1: 0,
+		score2: 0,
+		score3: 0,
+		score4: 0
 	}
 	var count = 0;
-	while(userArray.length > 0 && count<10){
-		var indexToRemove = -1;
+	while(userArray.length > 0 && count<5){
 		var max = 0;
+		var indexToRemove = -1;
 		var userString = "No User";
+		var userScore = 0;
 		for (var i = 0; i < userArray.length; i++){
-			if (max < userArray[i].mlsaved){
+			if (max <= userArray[i].mlsaved){
+				max = userArray[i].mlsaved;
 				userString = userArray[i].fullname;
+				userScore = userArray[i].mlsaved;
 				indexToRemove = i;
 			}
 		}
@@ -191,6 +202,8 @@ function sortLeaderboard(req,res,next,userArray){
 		}
 		var toInsert = "user" + count;
 		leaderboard[toInsert] = userString;
+		toInsert = "score" + count;
+		leaderboard[toInsert] = userScore;
 		count++;
 	}
 	res.send(leaderboard);
@@ -209,7 +222,7 @@ function loadThisThing(req,res,next,toLoad){
 }
 
 
-//dealing with 404 page
+//dealing with 404 page (not needed for final version)
 app.use(function (req, res, next) {
   res.status(404).send("Error!");
 });
