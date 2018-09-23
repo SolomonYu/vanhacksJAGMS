@@ -37,17 +37,41 @@ app.use('/', function(req,res,next){
 app.use(express.json());
 
 //upon registering
-app.post('/newuser' function(req,res,next){
-	var newUser = {
+app.post('/newuser', function(req,res,next){
+	var enteredUser = {
 		username: req.body.username,
 		password: req.body.password
 	};
-	users.insertOne(newUser, (err,result) => {
-		if (err) console.log(err);
+
+	var existing = users.find(enteredUser).count().then(function(login){
+		console.log("checking if user exists");
+		existing = login;
+		existCheck(req,res,next,existing,enteredUser);
 	});
-	console.log("new user registered");
-	res.end();
+
 });
+
+function existCheck(req,res,next,existing,enteredUser){
+	if (existing == 0){
+		console.log("user not found, creating new user");
+		users.insertOne(newUser, (err,result) => {
+			if (err) console.log(err);
+		});
+		console.log("new user registered");
+		res.end();
+	}
+	else if(existing == 1){
+		console.log("user already exists");
+		res.end();
+	}
+	else{
+		console.log("something went wrong with user check");
+		console.log("existing is: " + existing);
+		res.end();
+	}
+};
+
+
 
 
 //for testing only:
