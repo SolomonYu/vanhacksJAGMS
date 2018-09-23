@@ -135,7 +135,7 @@ function loginCheck(req,res,next,existing,enteredUser){
 
 //updating ml saved
 app.post('/mlsaved', function(req,res,next){
-	var toSearchfor = { "email": req.body.email };
+	var toSearchfor = { "fullname": req.body.name1 };
 	var toSet = { $set: { "mlsaved" : req.body.mlsaved } };
 
 	users.update(toSearchfor,toSet,function(err,res){
@@ -218,7 +218,7 @@ function sortLeaderboard(req,res,next,userArray){
 function loadThisThing(req,res,next,toLoad){
   console.log(toLoad);
   console.log("above object loaded");
-  res.send(toLoad);
+  res.send(a);
   res.end();
 }
 
