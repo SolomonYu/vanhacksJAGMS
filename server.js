@@ -206,6 +206,7 @@ function sortLeaderboard(req,res,next,userArray){
 		leaderboard[toInsert] = userScore;
 		count++;
 	}
+	console.log(leaderboard);
 	res.send(leaderboard);
 	res.end();
 };
