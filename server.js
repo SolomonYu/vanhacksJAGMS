@@ -63,14 +63,14 @@ function existCheck(req,res,next,existing,enteredUser){
 		});
 		console.log("new user registered");
 		res.send({
-			status: 1;
+			status: 1
 		})
 		res.end();
 	}
 	else if(existing == 1){
 		console.log("user already exists");
 		res.send({
-			status: 0;
+			status: 0
 		})
 		res.end();
 	}
@@ -78,7 +78,7 @@ function existCheck(req,res,next,existing,enteredUser){
 		console.log("something went wrong with user check");
 		console.log("existing is: " + existing);
 		res.send({
-			status: 0;
+			status: 0
 		})
 		res.end();
 	}
@@ -113,7 +113,7 @@ function loginCheck(req,res,next,existing,enteredUser){
 	else if(existing == 0){
 		console.log("user does not exist");
 		res.send({
-			status: 0;
+			status: 0
 		})
 		res.end();
 	}
