@@ -38,6 +38,7 @@ app.use(express.json());
 
 //upon registering a new user
 app.post('/newuser', function(req,res,next){
+	//construct a new user based on info from form
 	var enteredUser = {
 		email: req.body.email,
 		password: req.body.password,
@@ -45,7 +46,8 @@ app.post('/newuser', function(req,res,next){
 		mlsaved: 0
 	};
 
-	var existing = users.find(enteredUser).count().then(function(login){
+
+	var existing = users.find({"email": req.body.email}).count().then(function(login){
 		console.log("checking if user exists for registration");
 		existing = login;
 		existCheck(req,res,next,existing,enteredUser);
@@ -60,10 +62,12 @@ function existCheck(req,res,next,existing,enteredUser){
 			if (err) console.log(err);
 		});
 		console.log("new user registered");
+		res.send("passed");
 		res.end();
 	}
 	else if(existing == 1){
 		console.log("user already exists");
+		res.send("failed");
 		res.end();
 	}
 	else{
@@ -106,7 +110,7 @@ function loginCheck(req,res,next,existing,enteredUser){
 }
 
 //updating ml saved
-app.post('mlsaved', function(req,res,next){
+app.post('/mlsaved', function(req,res,next){
 	var toSearchfor = { "email": req.body.email };
 	var toSet = { $set: { "mlsaved" : req.body.mlsaved } };
 
