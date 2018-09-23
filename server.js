@@ -218,7 +218,7 @@ function sortLeaderboard(req,res,next,userArray){
 function loadThisThing(req,res,next,toLoad){
   console.log(toLoad);
   console.log("above object loaded");
-  res.send(a);
+  res.send(toLoad);
   res.end();
 }
 
