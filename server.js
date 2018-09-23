@@ -62,17 +62,24 @@ function existCheck(req,res,next,existing,enteredUser){
 			if (err) console.log(err);
 		});
 		console.log("new user registered");
-		res.send("passed");
+		res.send({
+			status: 1;
+		})
 		res.end();
 	}
 	else if(existing == 1){
 		console.log("user already exists");
-		res.send("failed");
+		res.send({
+			status: 0;
+		})
 		res.end();
 	}
 	else{
 		console.log("something went wrong with user check");
 		console.log("existing is: " + existing);
+		res.send({
+			status: 0;
+		})
 		res.end();
 	}
 };
@@ -105,6 +112,9 @@ function loginCheck(req,res,next,existing,enteredUser){
 	}
 	else if(existing == 0){
 		console.log("user does not exist");
+		res.send({
+			status: 0;
+		})
 		res.end();
 	}
 	else{
@@ -124,6 +134,7 @@ app.post('/mlsaved', function(req,res,next){
 		if(err) throw err;
 		console.log("user pref updated");
 	});
+	res.end();
 });
 
 
