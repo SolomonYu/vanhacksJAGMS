@@ -40,13 +40,13 @@ app.use(express.json());
 app.post('/newuser', function(req,res,next){
 	//construct a new user based on info from form
 	var enteredUser = {
-		email: req.body.email,
-		password: req.body.password,
-		fullname: req.body.fullname,
-		mlsaved: 0
+		email: req.body.email,			//string
+		password: req.body.password,	//string
+		fullname: req.body.fullname,	//string
+		mlsaved: 0						//int
 	};
 
-
+	//check if user exists in databases
 	var existing = users.find({"email": req.body.email}).count().then(function(login){
 		console.log("checking if user exists for registration");
 		existing = login;
@@ -84,6 +84,7 @@ app.post('/login',function(req,res,next){
 		password: req.body.password
 	};
 
+	//find how many users with this username and password exist
 	var existing = users.find(enteredUser).count().then(function(login){
 		console.log("checking if user exists for login");
 		existing = login;
@@ -92,10 +93,15 @@ app.post('/login',function(req,res,next){
 
 });
 
+//deal with whether the user exists or not
 function loginCheck(req,res,next,existing,enteredUser){
 	if(existing == 1){
 		console.log("valid user has logged in");
-		res.end();
+		var tempuser;
+		users.findOne(enteredUser).then(function(loadeduser){
+			tempuser = loadeduser;
+			loadThisThing(req,res,next,tempuser);
+		});
 	}
 	else if(existing == 0){
 		console.log("user does not exist");
