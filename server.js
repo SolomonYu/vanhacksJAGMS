@@ -142,13 +142,59 @@ app.post('/mlsaved', function(req,res,next){
 //for testing only:
 //view all users
 app.get('/displayall', function(req,res,next){
-  var userArray;
-  users.find({}).toArray()
-  .then(function(tempArray){
+	var userArray;
+	users.find({}).toArray().then(function(tempArray){
     userArray = tempArray;
     loadThisThing(req,res,next,userArray);
   });
 });
+
+//viewing leaderboard of top 10 players
+app.get('/leaderboard', function(req,res,next){
+	var userArray;
+	users.find({}).toArray().then(function(tempArray){
+    userArray = tempArray;
+    sortLeaderboard(req,res,next,userArray);
+  });
+});
+
+//sorting and sending the sorted leaderboard of top 10 player
+//warning: this sorting algorithm is stupidly inefficient,
+//but it's a hackathon so gotta go fast
+function sortLeaderboard(req,res,next,userArray){
+	var leaderboard = {
+		user0: "No user",
+		user1: "No user",
+		user2: "No user",
+		user3: "No user",
+		user4: "No user",
+		user5: "No user",
+		user6: "No user",
+		user7: "No user",
+		user8: "No user",
+		user9: "No user"
+	}
+	var count = 0;
+	while(userArray.length > 0 && count<10){
+		var indexToRemove = -1;
+		var max = 0;
+		var userString = "No User";
+		for (var i = 0; i < userArray.length; i++){
+			if (max < userArray[i].mlsaved){
+				userString = userArray[i].fullname;
+				indexToRemove = i;
+			}
+		}
+		if (indexToRemove != -1){
+			userArray.splice(indexToRemove,1);
+		}
+		var toInsert = "user" + count;
+		leaderboard[toInsert] = userString;
+		count++;
+	}
+	res.send(leaderboard);
+	res.end();
+};
 
 
 
