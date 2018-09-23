@@ -37,6 +37,7 @@ app.use('/', function(req,res,next){
 app.use(express.json());
 
 //upon registering a new user
+//note: passwords currently have no security
 app.post('/newuser', function(req,res,next){
 	//construct a new user based on info from form
 	var enteredUser = {
