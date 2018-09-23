@@ -190,7 +190,7 @@ function sortLeaderboard(req,res,next,userArray){
 		var userString = "No User";
 		var userScore = "0";
 		for (var i = 0; i < userArray.length; i++){
-			if (max <= userArray[i].mlsaved){
+			if (max <= parseInt(userArray[i].mlsaved,10)){
 				max = userArray[i].mlsaved;
 				userString = userArray[i].fullname;
 				userScore = userArray[i].mlsaved;
